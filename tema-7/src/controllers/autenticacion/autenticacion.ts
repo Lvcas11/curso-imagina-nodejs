@@ -1,24 +1,29 @@
+// src/controllers/autenticacion/autenticacion.js
 import { Request, Response } from "express";
 import jwt from "jsonwebtoken";
 import { roles } from "../../config/roles";
 import Autenticacion from "../../models/autenticacion/autenticacion";
-
-type TipoDeRespuesta = "texto" | "html" | "json";
+import Usuario from "../../models/usuarios/usuarios"; // Asegúrate de importar tu modelo de Usuario
+import bcrypt from "bcrypt";
 
 const secretKey = process.env.JWT_SECRET || "tu_secreto_aqui";
 
 export const login = async (req: Request, res: Response) => {
-  const nombre = req.body.nombre;
-  const contrasena = req.body.contrasena;
-  // 1. chequear que existe tanto usuario como contraseña o hacer un redirect
-  // 2. en caso en que contenga ambos se tiene que ir a comprobar en la DB que el usuario exista
-  // 3. debemos guardar en req.usuario este valor y dentro de el su rol preestablecido.
-  const usuario = { nombre, contrasena, rol: roles.user };
+  const { nombre, contrasena } = req.body;
 
   try {
-    const token = jwt.sign(usuario, secretKey, { expiresIn: "1h" });
+    const usuario = await Usuario.findOne({ where: { nombre } });
+
+    if (!usuario) {
+      return res.status(401).json({ message: "Usuario no encontrado" });
+    }
+
+    const payload = { id: usuario.id, nombre: usuario.nombre, rol: roles.user };
+    const token = jwt.sign(payload, secretKey, { expiresIn: "1h" });
+
     console.log("se pudo crear el token", token);
     await Autenticacion.create({ token });
+
     res.json({ token });
   } catch (error) {
     const data = {
@@ -27,7 +32,6 @@ export const login = async (req: Request, res: Response) => {
     };
 
     console.error(error);
-
     res.status(400).json(data);
   }
 };
@@ -45,7 +49,6 @@ export const obtenerTokens = async (req: Request, res: Response) => {
     };
 
     console.error(error);
-
     res.status(500).json(data);
   }
 };
