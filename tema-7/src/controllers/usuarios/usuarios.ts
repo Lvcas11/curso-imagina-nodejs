@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import Usuario from "../../models/usuarios/usuarios";
+import ErrorHandler, { tiposDeMetodos } from "../../errores/errorHandler";
 
 type TipoDeRespuesta = "texto" | "html" | "json";
 
@@ -30,14 +31,12 @@ export const obtenerUsarios = async (
     res.status(200).send(data);
     return;
   } catch (error) {
-    const data = {
-      status: 500,
-      message: error,
-    };
-
-    console.error(error);
-
-    res.status(500).json(data);
+    // Manejo de errores
+    ErrorHandler({
+      metodo: tiposDeMetodos.GET,
+      error,
+      res,
+    });
   }
 };
 
@@ -45,12 +44,12 @@ export const crearUsuario = async (req: Request, res: Response) => {
   const { nombre, apellido } = req.body;
 
   if (!nombre || !apellido) {
-    const data = {
-      status: "400",
-      message: "No contiene nombre o apellido en el cuerpo",
-    };
-
-    res.status(400).json(data);
+    const error = new Error("No contiene nombre o apellido en el cuerpo");
+    ErrorHandler({
+      metodo: tiposDeMetodos.POST,
+      error,
+      res,
+    });
     return;
   }
 
@@ -58,14 +57,12 @@ export const crearUsuario = async (req: Request, res: Response) => {
     const nuevoUsuario = await Usuario.create({ nombre, apellido });
     res.status(201).json(nuevoUsuario);
   } catch (error) {
-    const data = {
-      status: 400,
-      message: error,
-    };
-
-    console.error(error);
-
-    res.status(400).json(data);
+    // Manejo de errores
+    ErrorHandler({
+      metodo: tiposDeMetodos.POST,
+      error,
+      res,
+    });
   }
 };
 
@@ -75,12 +72,12 @@ export const modificarUsuario = async (req: Request, res: Response) => {
   const { nombre, apellido } = req.body;
 
   if (!nombre || !apellido) {
-    const data = {
-      status: "400",
-      message: "No contiene nombre o apellido en el cuerpo",
-    };
-
-    res.status(400).json(data);
+    const error = new Error("No contiene nombre o apellido en el cuerpo");
+    ErrorHandler({
+      metodo: tiposDeMetodos.PUT,
+      error,
+      res,
+    });
     return;
   }
 
@@ -88,11 +85,12 @@ export const modificarUsuario = async (req: Request, res: Response) => {
     const usuarioObtenido = await Usuario.findByPk(id);
 
     if (!usuarioObtenido) {
-      const data = {
-        status: 404,
-        message: "User Not Found",
-      };
-      res.status(404).json(data);
+      const error = new Error("User Not Found");
+      ErrorHandler({
+        metodo: tiposDeMetodos.PUT,
+        error,
+        res,
+      });
       return;
     }
 
@@ -102,13 +100,12 @@ export const modificarUsuario = async (req: Request, res: Response) => {
     });
     res.status(201).json(usuarioModificado);
   } catch (error) {
-    const data = {
-      status: 400,
-      message: error,
-    };
-
-    console.error(error);
-    res.status(400).json(data);
+    // Manejo de errores
+    ErrorHandler({
+      metodo: tiposDeMetodos.PUT,
+      error,
+      res,
+    });
   }
 };
 
@@ -119,23 +116,23 @@ export const eliminarUsuario = async (req: Request, res: Response) => {
     const usuarioObtenido = await Usuario.findByPk(id);
 
     if (!usuarioObtenido) {
-      const data = {
-        status: 404,
-        message: "User Not Found",
-      };
-      res.status(404).json(data);
+      const error = new Error("User Not Found");
+      ErrorHandler({
+        metodo: tiposDeMetodos.DELETE,
+        error,
+        res,
+      });
       return;
     }
 
     const usuarioEliminado = await usuarioObtenido.destroy();
     res.status(201).json(usuarioEliminado);
   } catch (error) {
-    const data = {
-      status: 400,
-      message: error,
-    };
-
-    console.error(error);
-    res.status(400).json(data);
+    // Manejo de errores
+    ErrorHandler({
+      metodo: tiposDeMetodos.DELETE,
+      error,
+      res,
+    });
   }
 };

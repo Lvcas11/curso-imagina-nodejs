@@ -11,7 +11,7 @@ export const crearUsuario = async (req: Request, res: Response) => {
   }
 };
 
-export const obtenerUsarios = async (
+export const obtenerUsuarios = async (
   req: Request,
   res: Response,
   tipo: "json" | "texto" | "html"
