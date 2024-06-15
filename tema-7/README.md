@@ -4,6 +4,7 @@ Este proyecto es una aplicación de prueba diseñada para demostrar el funcionam
 
 ### Estructura del Proyecto
 
+```
 ├── src/
 │ ├── controllers/ # Controladores de las rutas
 │ ├── errores/ # Manejadores de errores
@@ -20,6 +21,7 @@ Este proyecto es una aplicación de prueba diseñada para demostrar el funcionam
 ├── jest.config.js # Configuración de Jest
 ├── package.json # Dependencias y scripts de la aplicación
 └── tsconfig.json # Configuración de TypeScript
+```
 
 ### Scripts Disponibles
 
