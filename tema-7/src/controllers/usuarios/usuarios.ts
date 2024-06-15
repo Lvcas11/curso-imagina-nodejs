@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import Usuario from "../../models/usuarios/usuarios";
-import ErrorHandler, { tiposDeMetodos } from "../../errores/errorHandler";
+import ErrorHandler from "../../errores/errorHandler";
+import { tiposDeMetodos } from "../../types";
 
 type TipoDeRespuesta = "texto" | "html" | "json";
 
