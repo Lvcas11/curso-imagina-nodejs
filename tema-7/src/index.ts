@@ -1,4 +1,6 @@
 import express, { Express } from "express";
+import https from "https";
+import fs from "fs";
 import sequelize from "./config/database";
 import dotenv from "dotenv";
 import passport from "./config/passport"; // Importa la configuración de Passport.js
@@ -13,6 +15,11 @@ dotenv.config();
 const app: Express = express();
 const port = process.env.PORT || 3000;
 
+// Lee el certificado y la clave privada
+const key = fs.readFileSync("./certs/key.pem", "utf8");
+const cert = fs.readFileSync("./certs/cert.pem", "utf8");
+const credentials = { key, cert };
+
 // Configura Swagger
 swaggerConfig(app);
 
@@ -22,15 +29,15 @@ app.use(express.json());
 // Inicializa Passport
 app.use(passport.initialize());
 
-//app.use("/auth", autenticacionApiRouter);
+// app.use("/auth", autenticacionApiRouter);
 app.use(
   "/api",
   passport.authenticate("jwt", { session: false }),
   usuariosApiRouter
 );
 
-// Acciona el arrancar de la app y se queda escuchando
-app.listen(port, async () => {
+// Crea el servidor HTTPS
+https.createServer(credentials, app).listen(port, async () => {
   await sequelize.sync(); // Sincroniza el modelo con la base de datos
-  console.log(`[server]: Server levantado en: http://localhost:${port}`);
+  console.log(`[server]: Server levantado en: https://localhost:${port}`);
 });
