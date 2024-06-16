@@ -3,7 +3,7 @@ import sequelize from "./config/database";
 import dotenv from "dotenv";
 import passport from "./config/passport"; // Importa la configuración de Passport.js
 import usuariosApiRouter from "./routes/usuarios/usuarios";
-import autenticacionApiRouter from "./routes/autenticacion/autenticacion";
+// import autenticacionApiRouter from "./routes/autenticacion/autenticacion";
 import swaggerConfig from "./config/swagger";
 
 // Carga y analiza los detalles de configuración del archivo .env en el objeto process.env de Node.js
@@ -22,7 +22,7 @@ app.use(express.json());
 // Inicializa Passport
 app.use(passport.initialize());
 
-app.use("/auth", autenticacionApiRouter);
+//app.use("/auth", autenticacionApiRouter);
 app.use(
   "/api",
   passport.authenticate("jwt", { session: false }),
