@@ -20,3 +20,8 @@ export const tiposDeEstados = {
   FORBIDDEN: 403,
   INTERNAL_SERVER_ERROR: 500,
 } as const;
+
+/**
+ * Tipo que define los posibles formatos de respuesta
+ */
+export type TipoDeRespuesta = "texto" | "html" | "json";

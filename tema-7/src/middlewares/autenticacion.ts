@@ -1,5 +1,4 @@
 import { Request, Response, NextFunction } from "express";
-import { roles } from "../config/roles";
 import jwt from "jsonwebtoken";
 
 const secretKey = process.env.JWT_SECRET || "tu_secreto_aqui"; // Debe ser una clave segura y almacenada en una variable de entorno
