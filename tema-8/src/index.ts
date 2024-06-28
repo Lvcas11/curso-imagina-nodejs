@@ -31,9 +31,12 @@ const app: Express = express();
 const port = process.env.PORT || 3000;
 
 // Configura Handlebars
-app.engine("handlebars", engine());
-app.set("view engine", "handlebars");
-app.set("views", "./src/views"); // Directorio de las plantillas
+// app.engine("handlebars", engine());
+// app.set("view engine", "handlebars");
+// app.set("views", "./src/views"); // Directorio de las plantillas
+
+app.set("view engine", "pug");
+app.set("views", "./src/templates");
 
 // Lee el certificado y la clave privada
 const key = fs.readFileSync("./certs/key.pem", "utf8");
@@ -50,7 +53,7 @@ app.use(express.json());
 
 // Define una ruta de ejemplo para probar Handlebars
 app.get("/hello", (req: Request, res: Response) => {
-  res.render("hello", { name: "lucas" });
+  res.render("hello", { name: "lucas 2" });
 });
 
 // Inicializa Passport
