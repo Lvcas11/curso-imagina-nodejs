@@ -1,9 +1,11 @@
+import { Request, Response } from "express";
 import express, { Express } from "express";
 import * as Sentry from "@sentry/node";
 import { nodeProfilingIntegration } from "@sentry/profiling-node";
 import https from "https";
 import fs from "fs";
 import sequelize from "./config/database";
+import { engine } from "express-handlebars"; // Importa el motor de Handlebars
 import dotenv from "dotenv";
 import passport from "./config/passport"; // Importa la configuración de Passport.js
 import usuariosApiRouter from "./routes/usuarios/usuarios";
@@ -28,6 +30,11 @@ Sentry.init({
 const app: Express = express();
 const port = process.env.PORT || 3000;
 
+// Configura Handlebars
+app.engine("handlebars", engine());
+app.set("view engine", "handlebars");
+app.set("views", "./src/views"); // Directorio de las plantillas
+
 // Lee el certificado y la clave privada
 const key = fs.readFileSync("./certs/key.pem", "utf8");
 const cert = fs.readFileSync("./certs/cert.pem", "utf8");
@@ -40,6 +47,11 @@ swaggerConfig(app);
 
 // Middleware para parsear el cuerpo de las solicitudes en formato JSON
 app.use(express.json());
+
+// Define una ruta de ejemplo para probar Handlebars
+app.get("/hello", (req: Request, res: Response) => {
+  res.render("hello", { name: "lucas" });
+});
 
 // Inicializa Passport
 app.use(passport.initialize());
