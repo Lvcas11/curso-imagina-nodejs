@@ -60,6 +60,10 @@ app.get("/hello", (req: Request, res: Response) => {
   res.render("hello", { name: "lucas 2" });
 });
 
+app.get("/", (req: Request, res: Response) => {
+  res.render("index", { name: "lucas 2" });
+});
+
 // Inicializa Passport
 app.use(passport.initialize());
 
