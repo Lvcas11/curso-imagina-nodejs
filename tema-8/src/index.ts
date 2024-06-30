@@ -4,8 +4,8 @@ import * as Sentry from "@sentry/node";
 import { nodeProfilingIntegration } from "@sentry/profiling-node";
 import https from "https";
 import fs from "fs";
-// import sequelize from "./config/database";
-// import { engine } from "express-handlebars"; // Importa el motor de Handlebars
+import sequelize from "./config/database";
+import { engine } from "express-handlebars"; // Importa el motor de Handlebars
 import dotenv from "dotenv";
 import passport from "./config/passport"; // Importa la configuración de Passport.js
 import usuariosApiRouter from "./routes/usuarios/usuarios";
@@ -98,7 +98,7 @@ app.use(
 
 // Crea el servidor HTTPS
 httpsServer.listen(port, async () => {
-  // await sequelize.sync(); // Sincroniza el modelo con la base de datos
+  await sequelize.sync(); // Sincroniza el modelo con la base de datos
   Sentry.captureMessage("Hola lucas", "info");
   console.log(`[server]: Server levantado en: https://localhost:${port}`);
 });
