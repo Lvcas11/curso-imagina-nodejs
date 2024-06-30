@@ -1,3 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hello Pug</title>
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', (event) => {
+      const socket = io();
+
+      socket.on("notification", (message) => {
+        alert(message);
+      });
+
+      socket.on("connectionVerified", (message) => {
+        alert(message);
+      });
+
+      window.sendNotification = function() {
+        const message = "Notificación de Lucas!";
+        socket.emit("sendNotification", message);
+      }
+
+      window.checkConnection = function() {
+        socket.emit("checkConnection");
+      }
+    });
+  </script>
+</head>
 <body>
-  <h1>Hola, {{name}}!</h1>
+  <h1>Hello 123456, {{name}}!</h1>
+  <button onclick="sendNotification()">Enviar Notificación</button>
+  <button onclick="checkConnection()">Verificar Conexión</button>
 </body>
+</html>
