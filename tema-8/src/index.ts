@@ -31,12 +31,12 @@ const app: Express = express();
 const port = process.env.PORT || 3000;
 
 // Configura Handlebars
-app.engine("handlebars", engine());
-app.set("view engine", "handlebars");
-app.set("views", "./src/views"); // Directorio de las plantillas
+// app.engine("handlebars", engine());
+// app.set("view engine", "handlebars");
+// app.set("views", "./src/views"); // Directorio de las plantillas
 
-// app.set("view engine", "pug");
-// app.set("views", "./src/templates");
+app.set("view engine", "pug");
+app.set("views", "./src/templates");
 
 // Lee el certificado y la clave privada
 const key = fs.readFileSync("./certs/key.pem", "utf8");
@@ -45,7 +45,7 @@ const credentials = { key, cert };
 
 // Crea un servidor HTTP para Socket.IO
 const httpsServer = https.createServer(credentials, app);
-const io = new Server(httpsServer);
+// const io = new Server(httpsServer);
 
 Sentry.setupExpressErrorHandler(app);
 
@@ -73,28 +73,28 @@ app.use(
   usuariosApiRouter
 );
 
-io.on("connection", (socket) => {
-  console.log("Nuevo cliente conectado");
+// io.on("connection", (socket) => {
+//   console.log("Nuevo cliente conectado");
 
-  // Envía una notificación al cliente cuando se conecta
-  socket.emit("notification", "Bienvenido al servidor!");
+//   // Envía una notificación al cliente cuando se conecta
+//   socket.emit("notification", "Bienvenido al servidor!");`
 
-  // Maneja notificaciones desde el cliente
-  socket.on("sendNotification", (message) => {
-    console.log("Notificación recibida del cliente:", message);
-    io.emit("notification", message);
-  });
+//   // Maneja notificaciones desde el cliente
+//   socket.on("sendNotification", (message) => {
+//     console.log("Notificación recibida del cliente:", message);
+//     io.emit("notification", message);
+//   });
 
-  // Maneja la verificación de conexión bidireccional
-  socket.on("checkConnection", () => {
-    console.log("Verificación de conexión recibida del cliente");
-    socket.emit("connectionVerified", "Conexión bidireccional verificada");
-  });
+//   // Maneja la verificación de conexión bidireccional
+//   socket.on("checkConnection", () => {
+//     console.log("Verificación de conexión recibida del cliente");
+//     socket.emit("connectionVerified", "Conexión bidireccional verificada");
+//   });
 
-  socket.on("disconnect", () => {
-    console.log("Cliente desconectado");
-  });
-});
+//   socket.on("disconnect", () => {
+//     console.log("Cliente desconectado");
+//   });
+// });
 
 // Crea el servidor HTTPS
 httpsServer.listen(port, async () => {
