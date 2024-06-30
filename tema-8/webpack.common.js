@@ -1,12 +1,12 @@
 const path = require('path');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
-const Dotenv = require('dotenv-webpack');
 const nodeExternals = require('webpack-node-externals');
 
 module.exports = {
   entry: './src/index.ts',
   target: 'node',
-  externals: [nodeExternals()],
+  externals: [nodeExternals()], // nodeExternals debería manejar esto correctamente
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: 'bundle.js'
@@ -31,6 +31,10 @@ module.exports = {
   },
   plugins: [
     new CleanWebpackPlugin(),
-    new Dotenv() // No necesitas especificar la ruta aquí
+    new CopyWebpackPlugin({
+      patterns: [
+        { from: path.resolve(__dirname, 'src/config/.env'), to: '.env' }
+      ]
+    })
   ]
 };
